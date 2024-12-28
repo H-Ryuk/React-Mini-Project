@@ -55,21 +55,29 @@ export default function ProductList() {
     const displayProducts = () => {
         let productTemp = productList
 
-
-        if (searchValue !== undefined) {
-            productTemp = productList.filter(product => 
-                product.id.toString().includes(searchValue)
+        if (searchValue !== undefined && currentCategory !== undefined) {
+            productTemp = productList.filter(product =>
+                product.category === currentCategory
+                && (product.id.toString().includes(searchValue)
                     || product.title.includes(searchValue)
-                    || product.description.includes(searchValue)
+                    || product.description.includes(searchValue))
             )
         }
 
-        if (currentCategory !== undefined) {
+        if (searchValue !== undefined && currentCategory === undefined) {
+            productTemp = productList.filter(product =>
+                product.id.toString().includes(searchValue)
+                || product.title.includes(searchValue)
+                || product.description.includes(searchValue)
+            )
+        }
+
+        if (currentCategory !== undefined && searchValue === undefined) {
             productTemp = productList.filter(product => {
                 return product.category === currentCategory
             })
         }
-        
+
 
         if (productTemp.length > 0) {
             return productTemp.map((product, key) => {
